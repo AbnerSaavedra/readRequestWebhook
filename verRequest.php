@@ -1,24 +1,19 @@
 <?php  
 
-/*$input = @file_get_contents("php://input");
-// Parsear el contenido como JSON.
-$eventJson = json_decode($input);
+$myfile = fopen("./log.txt", "a") or die("Unable to open file!");
+fwrite($myfile, "Se ejecuto el webhook externo \n");
 
-// Usar los datos del Webhooks para alguna acción.
-echo "JSON: ".$eventJson."<br>";
-var_dump($eventJson);
-// Responder
-http_response_code(200);*/
+$dataJson=json_decode(file_get_contents('php://input'));
+/* en esta parte se optiene el mail que llega del json*/
+$email=$dataJson->email;
 
 
-$webhookContent = "";
+// a partir de aqui se puede procesar el mail como se guste en este caso lo escribiremos en un log.txt
 
-$webhook = fopen('php://input' , 'rb');
-while (!feof($webhook)) {
-	echo stream_get_contents($webhook, 5);
-    $webhookContent .= fread($webhook, 4096);
-}
-fclose($webhook);
 
-error_log($webhookContent);
+$myfile = fopen("./log.txt", "a") or die("Unable to open file!");
+$txt='Email: '.$email."\n";
+fwrite($myfile, $txt);
+fclose($myfile);
+
 ?>
